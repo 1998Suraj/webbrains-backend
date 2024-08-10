@@ -8,11 +8,13 @@ const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const AdminCreate = require("./controllers/adminCreated");
+const cors = require("cors");
 
 const app = express();
 
 connectDB();
 app.use(express.json());
+app.use(cors());
 AdminCreate();
 
 app.use("/api/auth", authRoutes);
