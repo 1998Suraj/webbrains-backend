@@ -20,7 +20,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const user = await User.findOne({ email: req.body.email });
-      if (!user || !user.approved) {
+      if (!user || !user.isApproved) {
         return res.status(401).send({ message: "Unauthorized" });
       }
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {

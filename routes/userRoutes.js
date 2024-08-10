@@ -1,18 +1,15 @@
-// const express = require("express");
-// const router = express.Router();
-// const { protect } = require("../middleware/auth");
-// const {
-//   likePost,
-//   savePost,
-//   getLikedPosts,
-//   getSavedPosts,
-// } = require("../controllers/userController");
+const express = require("express");
+const router = express.Router();
+const AuthMiddleware = require("../middlewares/auth");
+const UserController = require("../controllers/userController");
 
-// router.use(protect);
+// router.use(AuthMiddleware.protect);
+router.get("/get-user/:id", UserController.getUserDetail);
+router.post("/like/:userId/:postId", UserController.likePost);
+router.post("/unlike/:userId/:postId", UserController.UnLikePost);
+router.post("/save/:userId/:postId", UserController.savePost);
+router.post("/unsave/:userId/:postId", UserController.unSavePost);
+router.get("/liked-posts/:userId", UserController.getLikedPosts);
+router.get("/saved-posts/:userId", UserController.getSavedPosts);
 
-// router.post("/like/:postId", likePost);
-// router.post("/save/:postId", savePost);
-// router.get("/liked-posts", getLikedPosts);
-// router.get("/saved-posts", getSavedPosts);
-
-// module.exports = router;
+module.exports = router;

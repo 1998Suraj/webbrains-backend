@@ -1,20 +1,15 @@
-// const express = require("express");
-// const router = express.Router();
-// const { protect, admin } = require("../middleware/auth");
-// const {
-//   getAllPosts,
-//   getPost,
-//   createPost,
-//   updatePost,
-//   deletePost,
-// } = require("../controllers/postController");
+const express = require("express");
+const router = express.Router();
+const AuthMiddleware = require("../middlewares/auth");
+const BlogPostController = require("../controllers/postController");
+const admin = AuthMiddleware.admin;
 
-// router.get("/", getAllPosts);
-// router.get("/:id", getPost);
+router.get("/get-all-blogs", BlogPostController.getAllPosts);
+router.get("/get-blog/:id", BlogPostController.getBlogPostById);
 
-// router.use(protect);
-// router.post("/", admin, createPost);
-// router.put("/:id", admin, updatePost);
-// router.delete("/:id", admin, deletePost);
+// router.use(admin);
+router.post("/add-blog", BlogPostController.createPost);
+router.put("/edit-blog/:id", BlogPostController.updatePost);
+router.delete("/delete-blog/:id", BlogPostController.deletePost);
 
-// module.exports = router;
+module.exports = router;
