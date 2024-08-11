@@ -38,6 +38,7 @@ module.exports = {
           username: user.username,
           email: user.email,
           isAdmin: user.isAdmin,
+          isApproved: user.isApproved,
         },
         Secret.jwt_secret
       );
