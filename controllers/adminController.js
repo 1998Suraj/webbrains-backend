@@ -4,12 +4,35 @@ const Blog = require("../models/BlogPost");
 module.exports = {
   userRegisterationList: async (req, res) => {
     try {
-      const query = req.query.status; 
-      const user = await User.find(
-        { isApproved: query },
-        "username email isAdmin isApproved"
-      );
-      return res.status(200).json(user);
+      const query = req.query.status;
+      const page = parseInt(req.query.page, 10) || 1; // Default to page 1 if not specified
+      const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 results per page if not specified
+
+      if (page < 1 || limit < 1) {
+        return res
+          .status(400)
+          .json({ message: "Page and limit must be positive integers" });
+      }
+
+      let filter = {};
+
+      if (query && query.toLowerCase() !== "all") {
+        filter = { isApproved: query };
+      }
+      const skip = (page - 1) * limit;
+      const users = await User.find(filter, "username email isAdmin isApproved")
+        .skip(skip)
+        .limit(limit);
+
+      const totalUsers = await User.countDocuments(filter);
+      const totalPages = Math.ceil(totalUsers / limit);
+      return res.status(200).json({
+        totalUsers,
+        totalPages,
+        currentPage: page,
+        limit,
+        users,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Server error" });
@@ -94,7 +117,7 @@ module.exports = {
       }
 
       const blogs = await Blog.find({
-        title: { $regex: query, $options: "i" }
+        title: { $regex: query, $options: "i" },
       });
 
       return res.status(200).json(blogs);
