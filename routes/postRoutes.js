@@ -4,6 +4,7 @@ const AuthMiddleware = require("../middlewares/auth");
 const BlogPostController = require("../controllers/postController");
 const admin = AuthMiddleware.admin;
 
+router.use(AuthMiddleware.protect);
 router.get("/get-all-blogs", BlogPostController.getAllPosts);
 router.get("/get-blog/:id", BlogPostController.getBlogPostById);
 
