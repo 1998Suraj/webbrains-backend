@@ -22,8 +22,13 @@ module.exports = {
       if (!user) {
         return res.status(401).json({ message: "User not found" });
       }
-      if (!user.isApproved) {
-        return res.status(403).json({ message: "Account not approved" });
+      if (user.isApproved === "Pending") {
+        return res.status(403).json({ message: "Your account is in under review" });
+      }
+      if (user.isApproved === "Rejected") {
+        return res
+          .status(403)
+          .json({ message: "Your account is rejected by admin" });
       }
       req.user = user;
       next();
