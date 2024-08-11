@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Secret = require("../config/credentials");
+const Admin = require("../models/Admin");
 
 module.exports = {
   register: async (req, res) => {
@@ -37,6 +38,35 @@ module.exports = {
           username: user.username,
           email: user.email,
           isAdmin: user.isAdmin,
+        },
+        Secret.jwt_secret
+      );
+      res.status(200).send({ token });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({ message: "Server error" });
+    }
+  },
+  adminLogin: async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+      const admin = await Admin.findOne({ email });
+      if (!admin) {
+        return res.status(401).send({ message: "Invalid credentials" });
+      }
+
+      const isMatch = await admin.matchPassword(password);
+      if (!isMatch) {
+        return res.status(401).send({ message: "Invalid credentials" });
+      }
+
+      const token = jwt.sign(
+        {
+          id: admin._id,
+          username: admin.username,
+          email: admin.email,
+          isAdmin: admin.isAdmin,
         },
         Secret.jwt_secret
       );
