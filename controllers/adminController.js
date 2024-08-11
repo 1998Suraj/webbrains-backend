@@ -5,8 +5,8 @@ module.exports = {
   userRegisterationList: async (req, res) => {
     try {
       const query = req.query.status;
-      const page = parseInt(req.query.page, 10) || 1; // Default to page 1 if not specified
-      const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 results per page if not specified
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
 
       if (page < 1 || limit < 1) {
         return res
@@ -40,6 +40,7 @@ module.exports = {
   },
   approveUser: async (req, res) => {
     const { userId } = req.params;
+    console.log("UserId: ", userId);
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "Invalid user ID format" });

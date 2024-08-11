@@ -3,7 +3,7 @@ const router = express.Router();
 const AuthMiddleware = require("../middlewares/auth");
 const UserController = require("../controllers/userController");
 
-// router.use(AuthMiddleware.protect);
+router.use(AuthMiddleware.protect);
 router.get("/get-user/:id", UserController.getUserDetail);
 router.post("/like/:userId/:postId", UserController.likePost);
 router.post("/unlike/:userId/:postId", UserController.UnLikePost);

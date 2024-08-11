@@ -5,8 +5,7 @@ const AuthMiddleware = require("../middlewares/auth");
 const admin = AuthMiddleware.admin;
 const protect = AuthMiddleware.protect;
 
-// router.use(protect);
-// router.use(admin);
+router.use(admin);
 router.get("/user-register-list", AdminController.userRegisterationList);
 router.put("/approve/:userId", AdminController.approveUser);
 router.put("/reject/:userId", AdminController.rejectUser);
