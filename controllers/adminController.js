@@ -1,6 +1,20 @@
 const User = require("../models/User");
 const mongoose = require("mongoose");
+const Blog = require("../models/BlogPost");
 module.exports = {
+  userRegisterationList: async (req, res) => {
+    try {
+      const query = req.query.status; 
+      const user = await User.find(
+        { isApproved: query },
+        "username email isAdmin isApproved"
+      );
+      return res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
   approveUser: async (req, res) => {
     const { userId } = req.params;
 
@@ -67,6 +81,23 @@ module.exports = {
     try {
       const users = await User.find(query);
       res.status(200).json(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+  searchBlogs: async (req, res) => {
+    try {
+      const query = req.query.search;
+      if (!query) {
+        return res.status(400).json({ message: "Query parameter is required" });
+      }
+
+      const blogs = await Blog.find({
+        title: { $regex: query, $options: "i" }
+      });
+
+      return res.status(200).json(blogs);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server error" });
